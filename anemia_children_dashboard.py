@@ -19,32 +19,32 @@ df = df.rename(columns={
 df = df[df["Anemia_Level"].notna()]
 
 st.set_page_config(page_title="Children's Anemia Dashboard", layout="wide")
-st.title("🩸 Childhood Anemia Dashboard")
+st.markdown("# 🩸 Childhood Anemia Dashboard")
 
 # Filter selector
 res_filter = st.selectbox("Select Residence Type", options=df["Residence"].dropna().unique())
 filtered_df = df[df["Residence"] == res_filter]
 
 # Plot 1: Education Pie Chart
-col1, col2 = st.columns(2)
+col1, col2 = st.columns([1, 1])
 with col1:
-    fig1 = px.pie(filtered_df, names='Education', title="Education Distribution of Mothers")
+    fig1 = px.pie(filtered_df, names='Education', title="Education Distribution of Mothers", width=300, height=300)
     st.plotly_chart(fig1, use_container_width=True)
 
 # Plot 2: Iron Supplement Histogram
 with col2:
-    fig4 = px.histogram(filtered_df, x='Iron_Intake', color='Anemia_Level', barmode='group', title="Anemia by Iron Supplement Intake")
+    fig4 = px.histogram(filtered_df, x='Iron_Intake', color='Anemia_Level', barmode='group', title="Anemia by Iron Supplement Intake", width=300, height=300)
     st.plotly_chart(fig4, use_container_width=True)
 
 # Plot 3: Breastfeeding Bar Plot
-col3, col4 = st.columns(2)
+col3, col4 = st.columns([1, 1])
 with col3:
     top_bf = filtered_df['Breastfeed_Timing'].value_counts().nlargest(5).index
     bf_df = filtered_df[filtered_df['Breastfeed_Timing'].isin(top_bf)]
-    fig5 = px.bar(bf_df, x='Breastfeed_Timing', color='Anemia_Level', title="Anemia by Breastfeeding Timing")
+    fig5 = px.bar(bf_df, x='Breastfeed_Timing', color='Anemia_Level', title="Anemia by Breastfeeding Timing", width=300, height=300)
     st.plotly_chart(fig5, use_container_width=True)
 
 # Plot 4: Hemoglobin Scatter Plot
 with col4:
-    fig6 = px.scatter(filtered_df, x='Hemoglobin', y='Age_Group', color='Anemia_Level', title="Hemoglobin vs Age Group by Anemia Level")
+    fig6 = px.scatter(filtered_df, x='Hemoglobin', y='Age_Group', color='Anemia_Level', title="Hemoglobin vs Age Group by Anemia Level", width=300, height=300)
     st.plotly_chart(fig6, use_container_width=True)
