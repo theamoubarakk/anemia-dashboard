@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+import streamlit.components.v1 as components
 
 # Load and clean data
 df = pd.read_csv("children anemia.csv")
@@ -18,15 +19,27 @@ df = df.rename(columns={
 
 df = df[df["Anemia_Level"].notna()]
 
+# Custom CSS to reduce spacing
+st.markdown("""
+    <style>
+        .block-container {
+            padding-top: 1rem;
+            padding-bottom: 0rem;
+        }
+        .stTitle { margin-bottom: 0.5rem; }
+        .element-container { margin-bottom: 0.2rem; }
+    </style>
+""", unsafe_allow_html=True)
+
 st.set_page_config(page_title="Children's Anemia Dashboard", layout="wide")
-st.markdown("# 🩸 Childhood Anemia Dashboard")
+st.title("🩸 Childhood Anemia Dashboard")
 
 # Filter selector
 res_filter = st.selectbox("Select Residence Type", options=df["Residence"].dropna().unique())
 filtered_df = df[df["Residence"] == res_filter]
 
 # Plot 1: Education Pie Chart
-col1, col2 = st.columns([1, 1])
+col1, col2 = st.columns([1, 1], gap="small")
 with col1:
     fig1 = px.pie(filtered_df, names='Education', title="Education Distribution of Mothers", width=300, height=300)
     st.plotly_chart(fig1, use_container_width=True)
@@ -37,7 +50,7 @@ with col2:
     st.plotly_chart(fig4, use_container_width=True)
 
 # Plot 3: Breastfeeding Bar Plot
-col3, col4 = st.columns([1, 1])
+col3, col4 = st.columns([1, 1], gap="small")
 with col3:
     top_bf = filtered_df['Breastfeed_Timing'].value_counts().nlargest(5).index
     bf_df = filtered_df[filtered_df['Breastfeed_Timing'].isin(top_bf)]
