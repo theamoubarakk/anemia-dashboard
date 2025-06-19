@@ -2,19 +2,7 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
-# Load and clean data
-df = pd.read_csv("children anemia.csv")
-df = df.rename(columns={
-    'Age in 5-year groups': 'Age_Group',
-    'Type of place of residence': 'Residence',
-    'Highest educational level': 'Education',
-    'Wealth index combined': 'Wealth',
-    'Hemoglobin level adjusted for altitude (g/dl - 1 decimal)': 'Hemoglobin',
-    'Anemia level.1': 'Anemia_Level',
-    'Taking iron pills, sprinkles or syrup': 'Iron_Intake',
-    'Have mosquito bed net for sleeping (from household questionnaire)': 'Bed_Net',
-    'When child put to breast': 'Breastfeed_Timing'
-}) 
+
 
 df = df[df["Anemia_Level"].notna()]
 
