@@ -14,7 +14,7 @@ df = df.rename(columns={
     'Taking iron pills, sprinkles or syrup': 'Iron_Intake',
     'Have mosquito bed net for sleeping (from household questionnaire)': 'Bed_Net',
     'When child put to breast': 'Breastfeed_Timing'
-})
+}) 
 
 df = df[df["Anemia_Level"].notna()]
 
