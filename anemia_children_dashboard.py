@@ -15,19 +15,18 @@ df = df.rename(columns={
     'Smokes cigarettes': 'Smoking',
     'Current marital status': 'Marital_Status'
 })
-
 df = df[df['Anemia_Level'].notna()]
 
 # Page configuration and CSS
 st.set_page_config(page_title="Anemia Dashboard", layout="wide")
 st.markdown("""
-    <style>
-        .block-container { padding-top: 0.5rem; padding-bottom: 0rem; }
-        .stTitle { margin-bottom: 0.3rem; font-size: 1.8rem; }
-        .element-container { margin-bottom: 0.1rem; }
-        .row-widget.stRadio > div{ flex-direction: row; }
-        .stPlotlyChart { padding: 0rem !important; margin: 0rem !important; }
-        section[data-testid="stSidebar"] div[class^="css"] {
+<style>
+.block-container { padding-top: 0.5rem; padding-bottom: 0rem; }
+.stTitle { margin-bottom: 0.3rem; font-size: 1.8rem; }
+.element-container { margin-bottom: 0.1rem; }
+.row-widget.stRadio > div{ flex-direction: row; }
+.stPlotlyChart { padding: 0rem !important; margin: 0rem !important; }
+section[data-testid="stSidebar"] div[class^="css"] {
     position: fixed;
     top: 1rem;
     left: 0;
@@ -37,7 +36,7 @@ st.markdown("""
     border-right: 1px solid #ddd;
     padding-top: 0.5rem;
 }
-    </style>
+</style>
 """, unsafe_allow_html=True)
 
 st.title("🩸 Childhood Anemia Dashboard")
@@ -49,20 +48,16 @@ with st.sidebar:
     selected_age = st.radio("Select Age Group", df["Age_Group"].dropna().unique())
     selected_wealth = st.radio("Select Wealth Level", df["Wealth"].dropna().unique())
     selected_marital = st.radio("Marital Status", df["Marital_Status"].dropna().unique())
-    
+
 # Filter data
 filtered_df = df[
     (df["Residence"] == selected_residence) &
     (df["Age_Group"] == selected_age) &
     (df["Wealth"] == selected_wealth) &
     (df["Marital_Status"] == selected_marital)
-] == selected_residence) &
-    (df["Age_Group"] == selected_age) &
-    (df["Wealth"] == selected_wealth) &
-    (df["Marital_Status"] == selected_marital) &
-    ]
+]
 
-# Updated custom color palette (modified green to purple)
+# Updated custom color palette
 color_map = {
     'Not anemic': '#1f77b4',   # Blue
     'Mild': '#d62728',         # Red
@@ -84,12 +79,14 @@ with col2:
                   title="Hemoglobin by Wealth", width=360, height=300)
     st.plotly_chart(fig2, use_container_width=True)
 
-# Row 2: Iron Intake Pie Charts + Smoking Histogram
+# Row 2: Iron Intake Pie Chart + Smoking Histogram
 col3, col4 = st.columns([1, 1], gap="small")
 with col3:
     sub_df = filtered_df[filtered_df['Iron_Intake'] == 'No']
     if not sub_df.empty:
-        pie_fig = px.pie(sub_df, names='Anemia_Level', hole=0.4, color='Anemia_Level', color_discrete_map=color_map, title='Anemia Levels - Iron Intake: No', width=370, height=280)
+        pie_fig = px.pie(sub_df, names='Anemia_Level', hole=0.4, color='Anemia_Level',
+                         color_discrete_map=color_map, title='Anemia Levels - Iron Intake: No',
+                         width=300, height=250)
         st.plotly_chart(pie_fig, use_container_width=False, config={'displayModeBar': False})
 
 with col4:
