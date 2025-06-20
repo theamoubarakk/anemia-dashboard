@@ -21,7 +21,7 @@ df = df[df['Anemia_Level'].notna()]
 st.set_page_config(page_title="Anemia Dashboard", layout="wide")
 st.markdown("""
 <style>
-.block-container { padding-top: 0.5rem; padding-bottom: 0rem; }
+.block-container { padding-top: 0.2rem; padding-bottom: 0rem; }
 .stTitle { margin-bottom: 0.3rem; font-size: 1.8rem; }
 .element-container { margin-bottom: 0.1rem; }
 .row-widget.stRadio > div{ flex-direction: row; }
@@ -30,11 +30,11 @@ section[data-testid="stSidebar"] div[class^="css"] {
     position: fixed;
     top: 0rem;
     left: 0;
-    height: 100%;
+    height: 100vh;
     overflow-y: hidden;
     background: #f5f5f5;
     border-right: 1px solid #ddd;
-    padding-top: 0.1rem;
+    padding-top: 0.2rem;
 }
 </style>
 """, unsafe_allow_html=True)
