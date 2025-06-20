@@ -12,20 +12,11 @@ df = df.rename(columns={
     'Hemoglobin level adjusted for altitude (g/dl - 1 decimal)': 'Hemoglobin',
     'Anemia level.1': 'Anemia_Level',
     'Taking iron pills, sprinkles or syrup': 'Iron_Intake',
-    'Smokes cigarettes': 'Smoking'
+    'Smokes cigarettes': 'Smoking',
+    'Current marital status': 'Marital_Status'
 })
 
 df = df[df['Anemia_Level'].notna()]
-
-try:
-    df = pd.read_csv("children anemia.csv")
-    if df.empty:
-        st.error("CSV file is empty. Please upload a valid dataset.")
-        st.stop()
-except Exception as e:
-    st.error(f"Failed to load dataset: {e}")
-    st.stop()
-
 
 # Page configuration and CSS
 st.set_page_config(page_title="Anemia Dashboard", layout="wide")
@@ -47,15 +38,17 @@ with st.sidebar:
     selected_residence = st.selectbox("Select Residence", df["Residence"].dropna().unique())
     selected_age = st.selectbox("Select Age Group", df["Age_Group"].dropna().unique())
     selected_wealth = st.selectbox("Select Wealth Level", df["Wealth"].dropna().unique())
+    selected_marital = st.selectbox("Marital Status", df["Marital_Status"].dropna().unique())
 
 # Filter data
 filtered_df = df[
     (df["Residence"] == selected_residence) &
     (df["Age_Group"] == selected_age) &
-    (df["Wealth"] == selected_wealth)
+    (df["Wealth"] == selected_wealth) &
+    (df["Marital_Status"] == selected_marital)
 ]
 
-# Row 1: Education bar + Hemoglobin box
+# Row 1: Bar + Box
 col1, col2 = st.columns([1, 1], gap="small")
 with col1:
     fig1 = px.bar(filtered_df, x="Education", color="Anemia_Level", barmode="group", 
@@ -67,14 +60,14 @@ with col2:
                   title="Hemoglobin by Wealth", width=360, height=300)
     st.plotly_chart(fig2, use_container_width=True)
 
-# Row 2: Iron supplement bar + Smoking bar
+# Row 2: Pie + Scatter
 col3, col4 = st.columns([1, 1], gap="small")
 with col3:
-    fig3 = px.bar(filtered_df, x="Iron_Intake", color="Anemia_Level", barmode="stack",
-                  title="Iron Supplement Intake vs Anemia", width=360, height=300)
+    fig3 = px.pie(filtered_df, names="Iron_Intake", title="Iron Supplement Distribution by Anemia Level",
+                 hole=0.4, color_discrete_sequence=px.colors.qualitative.Set2)
     st.plotly_chart(fig3, use_container_width=True)
 
 with col4:
-    fig4 = px.bar(filtered_df, x="Smoking", color="Anemia_Level", barmode="group",
-                  title="Maternal Smoking vs Anemia Level", width=360, height=300)
+    fig4 = px.scatter(filtered_df, x="Smoking", y="Hemoglobin", color="Anemia_Level",
+                      title="Maternal Smoking vs Hemoglobin", width=360, height=300)
     st.plotly_chart(fig4, use_container_width=True)
