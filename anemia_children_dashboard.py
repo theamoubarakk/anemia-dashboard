@@ -27,7 +27,16 @@ st.markdown("""
         .element-container { margin-bottom: 0.1rem; }
         .row-widget.stRadio > div{ flex-direction: row; }
         .stPlotlyChart { padding: 0rem !important; margin: 0rem !important; }
-        section[data-testid="stSidebar"] div[class^="css"] { position: fixed; top: 3rem; left: 0; height: 100%; overflow-y: auto; background: #f5f5f5; border-right: 1px solid #ddd; padding-top: 2rem; }
+        section[data-testid="stSidebar"] div[class^="css"] {
+    position: fixed;
+    top: 1rem;
+    left: 0;
+    height: 100%;
+    overflow-y: auto;
+    background: #f5f5f5;
+    border-right: 1px solid #ddd;
+    padding-top: 0.5rem;
+}
     </style>
 """, unsafe_allow_html=True)
 
@@ -47,8 +56,11 @@ filtered_df = df[
     (df["Age_Group"] == selected_age) &
     (df["Wealth"] == selected_wealth) &
     (df["Marital_Status"] == selected_marital)
-]
-
+] == selected_residence) &
+    (df["Age_Group"] == selected_age) &
+    (df["Wealth"] == selected_wealth) &
+    (df["Marital_Status"] == selected_marital) &
+    ]
 
 # Updated custom color palette (modified green to purple)
 color_map = {
