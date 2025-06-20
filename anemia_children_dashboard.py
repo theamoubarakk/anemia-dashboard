@@ -71,13 +71,17 @@ with col2:
                   title="Hemoglobin by Wealth", width=360, height=300)
     st.plotly_chart(fig2, use_container_width=True)
 
-# Row 2: Iron Intake Bar + Smoking Histogram
+# Row 2: Iron Intake Pie Charts + Smoking Histogram
 col3, col4 = st.columns([1, 1], gap="small")
 with col3:
-    fig3 = px.bar(filtered_df, x='Iron_Intake', color='Anemia_Level', barmode='group',
-                 color_discrete_map=color_map,
-                 title='Iron Supplement Intake vs Anemia Level', width=360, height=300)
-    st.plotly_chart(fig3, use_container_width=True)
+    intake_groups = [val for val in filtered_df['Iron_Intake'].dropna().unique() if val != 'Don’t know']
+    for intake in intake_groups:
+        sub_df = filtered_df[filtered_df['Iron_Intake'] == intake]
+        if not sub_df.empty:
+            pie_fig = px.pie(sub_df, names='Anemia_Level', hole=0.4, 
+                             color='Anemia_Level', color_discrete_map=color_map,
+                             title=f'Anemia Levels - Iron Intake: {intake}')
+            st.plotly_chart(pie_fig, use_container_width=True)
 
 with col4:
     fig4 = px.histogram(filtered_df, x='Hemoglobin', facet_col='Smoking', color='Anemia_Level',
