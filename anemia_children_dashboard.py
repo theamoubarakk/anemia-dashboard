@@ -17,13 +17,15 @@ df = df.rename(columns={
 
 df = df[df['Anemia_Level'].notna()]
 
-# Page configuration
+# Page configuration and CSS
 st.set_page_config(page_title="Anemia Dashboard", layout="wide")
 st.markdown("""
     <style>
-        .block-container { padding-top: 1rem; padding-bottom: 0rem; }
-        .stTitle { margin-bottom: 0.5rem; }
-        .element-container { margin-bottom: 0.2rem; }
+        .block-container { padding-top: 0.5rem; padding-bottom: 0rem; }
+        .stTitle { margin-bottom: 0.3rem; font-size: 1.8rem; }
+        .element-container { margin-bottom: 0.1rem; }
+        .row-widget.stRadio > div{ flex-direction: row; }
+        .stPlotlyChart { padding: 0rem !important; margin: 0rem !important; }
     </style>
 """, unsafe_allow_html=True)
 
@@ -47,22 +49,22 @@ filtered_df = df[
 col1, col2 = st.columns([1, 1], gap="small")
 with col1:
     fig1 = px.bar(filtered_df, x="Education", color="Anemia_Level", barmode="group", 
-                  title="Anemia by Mother's Education")
+                  title="Anemia by Mother's Education", width=360, height=300)
     st.plotly_chart(fig1, use_container_width=True)
 
 with col2:
     fig2 = px.box(filtered_df, x="Wealth", y="Hemoglobin", color="Anemia_Level",
-                  title="Hemoglobin by Wealth")
+                  title="Hemoglobin by Wealth", width=360, height=300)
     st.plotly_chart(fig2, use_container_width=True)
 
 # Row 2: Iron supplement bar + Breastfeeding pie
 col3, col4 = st.columns([1, 1], gap="small")
 with col3:
     fig3 = px.bar(filtered_df, x="Iron_Intake", color="Anemia_Level", barmode="stack",
-                  title="Iron Supplement Intake vs Anemia")
+                  title="Iron Supplement Intake vs Anemia", width=360, height=300)
     st.plotly_chart(fig3, use_container_width=True)
 
 with col4:
     fig4 = px.pie(filtered_df, names="Breastfeed_Timing", 
-                 title="Breastfeeding Initiation Time")
+                 title="Breastfeeding Initiation Time", width=360, height=300)
     st.plotly_chart(fig4, use_container_width=True)
