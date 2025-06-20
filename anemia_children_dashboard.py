@@ -3,13 +3,7 @@ import pandas as pd
 import plotly.express as px
 
 # Load and clean data
-try:
-    df = pd.read_csv("children anemia.csv")
-except pd.errors.EmptyDataError:
-    st.error("CSV file 'children anemia.csv' not found or is empty. Please ensure the file is correctly uploaded and available in the app directory.")
-    st.stop()
-
-# Rename columns for convenience
+df = pd.read_csv("children anemia.csv")
 df = df.rename(columns={
     'Age in 5-year groups': 'Age_Group',
     'Type of place of residence': 'Residence',
@@ -40,7 +34,7 @@ section[data-testid="stSidebar"] div[class^="css"] {
     overflow-y: auto;
     background: #f5f5f5;
     border-right: 1px solid #ddd;
-    padding-top: 0.2rem;
+    padding-top: 0.1rem;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -92,7 +86,7 @@ with col3:
     if not sub_df.empty:
         pie_fig = px.pie(sub_df, names='Anemia_Level', hole=0.4, color='Anemia_Level',
                          color_discrete_map=color_map, title='Anemia Levels - Iron Intake: No',
-                         width=300, height=250)
+                         width=340, height=280)
         st.plotly_chart(pie_fig, use_container_width=False, config={'displayModeBar': False})
 
 with col4:
