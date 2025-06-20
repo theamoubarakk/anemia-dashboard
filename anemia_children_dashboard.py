@@ -28,13 +28,13 @@ st.markdown("""
 .stPlotlyChart { padding: 0rem !important; margin: 0rem !important; }
 section[data-testid="stSidebar"] div[class^="css"] {
     position: fixed;
-    top: 0.1rem;
+    top: 0rem;
     left: 0;
     height: 100%;
     overflow-y: hidden;
     background: #f5f5f5;
     border-right: 1px solid #ddd;
-    padding-top: 0.5rem;
+    padding-top: 0.1rem;
 }
 </style>
 """, unsafe_allow_html=True)
