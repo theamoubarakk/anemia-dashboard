@@ -27,12 +27,13 @@ st.markdown("""
         .element-container { margin-bottom: 0.1rem; }
         .row-widget.stRadio > div{ flex-direction: row; }
         .stPlotlyChart { padding: 0rem !important; margin: 0rem !important; }
+        section[data-testid="stSidebar"] div[class^="css"] { position: fixed; top: 3rem; left: 0; height: 100%; overflow-y: auto; background: #f5f5f5; border-right: 1px solid #ddd; padding-top: 2rem; }
     </style>
 """, unsafe_allow_html=True)
 
 st.title("🩸 Childhood Anemia Dashboard")
 
-# Sidebar Filters
+# Sidebar Filters (Fixed)
 with st.sidebar:
     st.header("Filters")
     selected_residence = st.selectbox("Select Residence", df["Residence"].dropna().unique())
@@ -70,7 +71,7 @@ with col2:
                   title="Hemoglobin by Wealth", width=360, height=300)
     st.plotly_chart(fig2, use_container_width=True)
 
-# Row 2: Updated Iron Intake Plot (Grouped Bar) + Scatter
+# Row 2: Histogram + Scatter
 col3, col4 = st.columns([1, 1], gap="small")
 with col3:
     fig3 = px.histogram(filtered_df, x="Iron_Intake", color="Anemia_Level", barmode="group",
