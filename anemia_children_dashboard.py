@@ -49,11 +49,11 @@ filtered_df = df[
     (df["Marital_Status"] == selected_marital)
 ]
 
-# Updated custom color palette (alternating blues and reds)
+# Updated custom color palette (modified green to purple)
 color_map = {
     'Not anemic': '#1f77b4',   # Blue
     'Mild': '#d62728',         # Red
-    'Moderate': '#2ca02c',     # Green
+    'Moderate': '#9467bd',     # Purple
     'Severe': '#17becf'        # Light Blue
 }
 
