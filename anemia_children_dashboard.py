@@ -12,7 +12,7 @@ df = df.rename(columns={
     'Hemoglobin level adjusted for altitude (g/dl - 1 decimal)': 'Hemoglobin',
     'Anemia level.1': 'Anemia_Level',
     'Taking iron pills, sprinkles or syrup': 'Iron_Intake',
-    'When child put to breast': 'Breastfeed_Timing'
+    'Smokes cigarettes': 'Smoking'
 })
 
 df = df[df['Anemia_Level'].notna()]
@@ -57,7 +57,7 @@ with col2:
                   title="Hemoglobin by Wealth", width=360, height=300)
     st.plotly_chart(fig2, use_container_width=True)
 
-# Row 2: Iron supplement bar + Breastfeeding pie
+# Row 2: Iron supplement bar + Smoking bar
 col3, col4 = st.columns([1, 1], gap="small")
 with col3:
     fig3 = px.bar(filtered_df, x="Iron_Intake", color="Anemia_Level", barmode="stack",
@@ -65,6 +65,6 @@ with col3:
     st.plotly_chart(fig3, use_container_width=True)
 
 with col4:
-    fig4 = px.pie(filtered_df, names="Breastfeed_Timing", 
-                 title="Breastfeeding Initiation Time", width=360, height=300)
+    fig4 = px.bar(filtered_df, x="Smoking", color="Anemia_Level", barmode="group",
+                  title="Maternal Smoking vs Anemia Level", width=360, height=300)
     st.plotly_chart(fig4, use_container_width=True)
