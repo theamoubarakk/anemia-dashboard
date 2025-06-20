@@ -46,6 +46,10 @@ filtered_df = df[
     (df["Residence"] == selected_residence) &
     (df["Age_Group"] == selected_age) &
     (df["Wealth"] == selected_wealth) &
+    (df["Marital_Status"] == selected_marital)
+] == selected_residence) &
+    (df["Age_Group"] == selected_age) &
+    (df["Wealth"] == selected_wealth) &
     (df["Marital_Status"] == selected_marital) &
     ]
 
