@@ -48,26 +48,38 @@ filtered_df = df[
     (df["Marital_Status"] == selected_marital)
 ]
 
+# Define consistent color mapping for anemia levels
+color_map = {
+    'Not anemic': '#1f77b4',
+    'Mild': '#ff7f0e',
+    'Moderate': '#2ca02c',
+    'Severe': '#d62728'
+}
+
 # Row 1: Bar + Box
 col1, col2 = st.columns([1, 1], gap="small")
 with col1:
-    fig1 = px.bar(filtered_df, x="Education", color="Anemia_Level", barmode="group", 
+    fig1 = px.bar(filtered_df, x="Education", color="Anemia_Level", barmode="group",
+                  color_discrete_map=color_map,
                   title="Anemia by Mother's Education", width=360, height=300)
     st.plotly_chart(fig1, use_container_width=True)
 
 with col2:
     fig2 = px.box(filtered_df, x="Wealth", y="Hemoglobin", color="Anemia_Level",
+                  color_discrete_map=color_map,
                   title="Hemoglobin by Wealth", width=360, height=300)
     st.plotly_chart(fig2, use_container_width=True)
 
-# Row 2: Pie + Scatter
+# Row 2: Updated Iron Intake Plot (Grouped Bar) + Scatter
 col3, col4 = st.columns([1, 1], gap="small")
 with col3:
-    fig3 = px.pie(filtered_df, names="Iron_Intake", title="Iron Supplement Distribution by Anemia Level",
-                 hole=0.4, color_discrete_sequence=px.colors.qualitative.Set2)
+    fig3 = px.histogram(filtered_df, x="Iron_Intake", color="Anemia_Level", barmode="group",
+                        color_discrete_map=color_map,
+                        title="Iron Supplement Intake vs Anemia", width=360, height=300)
     st.plotly_chart(fig3, use_container_width=True)
 
 with col4:
     fig4 = px.scatter(filtered_df, x="Smoking", y="Hemoglobin", color="Anemia_Level",
+                      color_discrete_map=color_map,
                       title="Maternal Smoking vs Hemoglobin", width=360, height=300)
     st.plotly_chart(fig4, use_container_width=True)
