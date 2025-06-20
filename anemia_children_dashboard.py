@@ -49,20 +49,20 @@ filtered_df = df[
     (df["Marital_Status"] == selected_marital)
 ]
 
-# Define consistent color mapping for anemia levels
+# Updated color palette for better visuals
 color_map = {
-    'Not anemic': '#1f77b4',
-    'Mild': '#ff7f0e',
-    'Moderate': '#2ca02c',
-    'Severe': '#d62728'
+    'Not anemic': '#4E79A7',
+    'Mild': '#F28E2B',
+    'Moderate': '#E15759',
+    'Severe': '#76B7B2'
 }
 
-# Row 1: Treemap + Box
+# Row 1: New Chart (Donut) + Box
 col1, col2 = st.columns([1, 1], gap="small")
 with col1:
-    fig1 = px.treemap(filtered_df, path=['Education', 'Anemia_Level'],
-                      color='Anemia_Level', color_discrete_map=color_map,
-                      title="Anemia Levels by Education Category")
+    fig1 = px.pie(filtered_df, names='Anemia_Level', hole=0.5,
+                  color='Anemia_Level', color_discrete_map=color_map,
+                  title="Overall Anemia Distribution", width=360, height=300)
     st.plotly_chart(fig1, use_container_width=True)
 
 with col2:
@@ -71,12 +71,12 @@ with col2:
                   title="Hemoglobin by Wealth", width=360, height=300)
     st.plotly_chart(fig2, use_container_width=True)
 
-# Row 2: Violin Plot + Facet Histogram
+# Row 2: Swapped violin -> grouped bar + Facet Histogram
 col3, col4 = st.columns([1, 1], gap="small")
 with col3:
-    fig3 = px.violin(filtered_df, y='Hemoglobin', x='Iron_Intake', color='Anemia_Level',
-                    box=True, points='all', color_discrete_map=color_map,
-                    title='Hemoglobin by Iron Supplement Intake', width=360, height=300)
+    fig3 = px.bar(filtered_df, x='Iron_Intake', color='Anemia_Level', barmode='group',
+                 color_discrete_map=color_map,
+                 title='Iron Supplement Intake vs Anemia Level', width=360, height=300)
     st.plotly_chart(fig3, use_container_width=True)
 
 with col4:
