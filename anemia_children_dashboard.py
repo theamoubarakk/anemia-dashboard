@@ -57,21 +57,21 @@ color_map = {
     'Severe': '#76B7B2'
 }
 
-# Row 1: Donut Chart + Education Bar Chart
+# Row 1: Mother's Education Bar + Hemoglobin Box
 col1, col2 = st.columns([1, 1], gap="small")
 with col1:
-    fig1 = px.pie(filtered_df, names='Anemia_Level', hole=0.5,
-                  color='Anemia_Level', color_discrete_map=color_map,
-                  title="Overall Anemia Distribution", width=360, height=300)
+    fig1 = px.bar(filtered_df, x="Education", color="Anemia_Level", barmode="group",
+                  color_discrete_map=color_map,
+                  title="Anemia by Mother's Education", width=360, height=300)
     st.plotly_chart(fig1, use_container_width=True)
 
 with col2:
-    fig2 = px.bar(filtered_df, x="Education", color="Anemia_Level", barmode="group",
+    fig2 = px.box(filtered_df, x="Wealth", y="Hemoglobin", color="Anemia_Level",
                   color_discrete_map=color_map,
-                  title="Anemia by Mother's Education", width=360, height=300)
+                  title="Hemoglobin by Wealth", width=360, height=300)
     st.plotly_chart(fig2, use_container_width=True)
 
-# Row 2: Iron Intake Bar Chart + Facet Histogram
+# Row 2: Iron Intake Bar + Smoking Histogram
 col3, col4 = st.columns([1, 1], gap="small")
 with col3:
     fig3 = px.bar(filtered_df, x='Iron_Intake', color='Anemia_Level', barmode='group',
