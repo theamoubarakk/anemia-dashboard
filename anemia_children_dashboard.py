@@ -3,7 +3,13 @@ import pandas as pd
 import plotly.express as px
 
 # Load and clean data
-df = pd.read_csv("children anemia.csv")
+try:
+    df = pd.read_csv("children anemia.csv")
+except pd.errors.EmptyDataError:
+    st.error("CSV file 'children anemia.csv' not found or is empty. Please ensure the file is correctly uploaded and available in the app directory.")
+    st.stop()
+
+# Rename columns for convenience
 df = df.rename(columns={
     'Age in 5-year groups': 'Age_Group',
     'Type of place of residence': 'Residence',
@@ -28,13 +34,13 @@ st.markdown("""
 .stPlotlyChart { padding: 0rem !important; margin: 0rem !important; }
 section[data-testid="stSidebar"] div[class^="css"] {
     position: fixed;
-    top: -2rem;
+    top: 0rem;
     left: 0;
     height: 100vh;
-    overflow-y: hidden;
+    overflow-y: auto;
     background: #f5f5f5;
     border-right: 1px solid #ddd;
-    padding-top: 0rem;
+    padding-top: 0.2rem;
 }
 </style>
 """, unsafe_allow_html=True)
