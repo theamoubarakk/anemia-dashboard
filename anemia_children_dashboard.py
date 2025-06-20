@@ -17,6 +17,16 @@ df = df.rename(columns={
 
 df = df[df['Anemia_Level'].notna()]
 
+try:
+    df = pd.read_csv("children anemia.csv")
+    if df.empty:
+        st.error("CSV file is empty. Please upload a valid dataset.")
+        st.stop()
+except Exception as e:
+    st.error(f"Failed to load dataset: {e}")
+    st.stop()
+
+
 # Page configuration and CSS
 st.set_page_config(page_title="Anemia Dashboard", layout="wide")
 st.markdown("""
