@@ -47,11 +47,8 @@ filtered_df = df[
     (df["Age_Group"] == selected_age) &
     (df["Wealth"] == selected_wealth) &
     (df["Marital_Status"] == selected_marital)
-] == selected_residence) &
-    (df["Age_Group"] == selected_age) &
-    (df["Wealth"] == selected_wealth) &
-    (df["Marital_Status"] == selected_marital) &
-    ]
+]
+
 
 # Updated custom color palette (modified green to purple)
 color_map = {
