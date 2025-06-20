@@ -57,12 +57,12 @@ color_map = {
     'Severe': '#d62728'
 }
 
-# Row 1: Bar + Box
+# Row 1: Treemap + Box
 col1, col2 = st.columns([1, 1], gap="small")
 with col1:
-    fig1 = px.bar(filtered_df, x="Education", color="Anemia_Level", barmode="group",
-                  color_discrete_map=color_map,
-                  title="Anemia by Mother's Education", width=360, height=300)
+    fig1 = px.treemap(filtered_df, path=['Education', 'Anemia_Level'],
+                      color='Anemia_Level', color_discrete_map=color_map,
+                      title="Anemia Levels by Education Category")
     st.plotly_chart(fig1, use_container_width=True)
 
 with col2:
@@ -71,16 +71,16 @@ with col2:
                   title="Hemoglobin by Wealth", width=360, height=300)
     st.plotly_chart(fig2, use_container_width=True)
 
-# Row 2: Histogram + Scatter
+# Row 2: Violin Plot + Facet Histogram
 col3, col4 = st.columns([1, 1], gap="small")
 with col3:
-    fig3 = px.histogram(filtered_df, x="Iron_Intake", color="Anemia_Level", barmode="group",
-                        color_discrete_map=color_map,
-                        title="Iron Supplement Intake vs Anemia", width=360, height=300)
+    fig3 = px.violin(filtered_df, y='Hemoglobin', x='Iron_Intake', color='Anemia_Level',
+                    box=True, points='all', color_discrete_map=color_map,
+                    title='Hemoglobin by Iron Supplement Intake', width=360, height=300)
     st.plotly_chart(fig3, use_container_width=True)
 
 with col4:
-    fig4 = px.scatter(filtered_df, x="Smoking", y="Hemoglobin", color="Anemia_Level",
-                      color_discrete_map=color_map,
-                      title="Maternal Smoking vs Hemoglobin", width=360, height=300)
+    fig4 = px.histogram(filtered_df, x='Hemoglobin', facet_col='Smoking', color='Anemia_Level',
+                        color_discrete_map=color_map,
+                        title='Hemoglobin Distribution by Smoking Status', width=360, height=300)
     st.plotly_chart(fig4, use_container_width=True)
