@@ -40,13 +40,15 @@ with st.sidebar:
     selected_age = st.selectbox("Select Age Group", df["Age_Group"].dropna().unique())
     selected_wealth = st.selectbox("Select Wealth Level", df["Wealth"].dropna().unique())
     selected_marital = st.selectbox("Marital Status", df["Marital_Status"].dropna().unique())
+    selected_smoking = st.selectbox("Smoking Status", df["Smoking"].dropna().unique())
 
 # Filter data
 filtered_df = df[
     (df["Residence"] == selected_residence) &
     (df["Age_Group"] == selected_age) &
     (df["Wealth"] == selected_wealth) &
-    (df["Marital_Status"] == selected_marital)
+    (df["Marital_Status"] == selected_marital) &
+    (df["Smoking"] == selected_smoking)
 ]
 
 # Updated custom color palette (modified green to purple)
@@ -80,7 +82,7 @@ with col3:
         st.plotly_chart(pie_fig, use_container_width=False, config={'displayModeBar': False})
 
 with col4:
-    fig4 = px.histogram(filtered_df, x='Hemoglobin', facet_col='Smoking', color='Anemia_Level',
+    fig4 = px.histogram(filtered_df, x='Hemoglobin', color='Anemia_Level',
                         color_discrete_map=color_map,
-                        title='Hemoglobin Distribution by Smoking Status', width=360, height=300)
+                        title=f'Hemoglobin Distribution for Smoking: {selected_smoking}', width=360, height=300)
     st.plotly_chart(fig4, use_container_width=True)
