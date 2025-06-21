@@ -39,7 +39,7 @@ section[data-testid="stSidebar"] div[class^="css"] {
 </style>
 """, unsafe_allow_html=True)
 
-st.title("🩸 Childhood Anemia Dashboard")
+st.title("🩸 Child Anemia Dashboard: Exploring Maternal Links")
 
 # Sidebar Filters (Fixed)
 with st.sidebar:
