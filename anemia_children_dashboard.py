@@ -47,7 +47,7 @@ filtered_df = df[
 
 # --- Color Map ---
 color_map = {
-    "Not anemic": "#0D1B2A",     # Dark Blue
+     "Not anemic": "#1E3A5F"
     "Mild": "#581845",           # Dark Bordeaux
     "Moderate": "#8B0000"        # Dark Red
 }
