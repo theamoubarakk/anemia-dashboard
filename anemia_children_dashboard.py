@@ -24,7 +24,7 @@ df = load_data()
 
 # --- Sidebar Filters ---
 st.sidebar.header("Filters")
-residence = st.sidebar.radio("Select Residence", df["Residence"].unique())
+residence = st.sidebar.radio("Select Residence", df["Type of place of residence"].unique())
 age_group = st.sidebar.radio("Select Age Group", sorted(df["Age_Group"].unique()))
 wealth = st.sidebar.selectbox("Select Wealth Index", df["Wealth_Index"].unique())
 iron_supp = st.sidebar.radio("Taking Iron Supplements", df["Iron_Supplements"].unique())
