@@ -93,15 +93,10 @@ with col3:
             height=280
         )
         st.plotly_chart(pie_fig, use_container_width=True)
-
 with col4:
-    fig4 = px.histogram(
-        df_filtered,
-        x='Age_First_Birth',
-        facet_col='Smoking',
-        color='Anemia_Level',
-        color_discrete_map=color_map,
-        title='Anemia Levels by Smoking and Age at First Birth',
-        height=280
-    )
+    edu_group = filtered_df.groupby("Education_Level")["Anemia_Level"].value_counts(normalize=True).rename("Proportion").reset_index()
+    fig4 = px.bar(edu_group, x="Education_Level", y="Proportion", color="Anemia_Level",
+                  barmode="group", title="Proportion of Anemia by Mother's Education",
+                  color_discrete_map=color_map)
     st.plotly_chart(fig4, use_container_width=True)
+
