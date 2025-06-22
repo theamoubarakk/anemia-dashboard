@@ -2,35 +2,43 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
-# Load and clean data
+# Load the dataset
 df = pd.read_csv("children_anemia_with_cities.csv")
+
+# Rename columns for clarity
 df = df.rename(columns={
-    'Highest educational level': 'Education_Level',
-    'Anemia level': 'Anemia_Level',
-    'Hemoglobin level adjusted for altitude (g/dl - 1 decimal)': 'Hemoglobin',
     'Type of place of residence': 'Residence',
-    'Age in 5-year groups': 'Age_Group',
+    'Highest educational level': 'Education_Level',
     'Wealth index combined': 'Wealth',
-    'Current marital status': 'Marital_Status',
-    'Taking iron pills, sprinkles or syrup': 'Iron_Intake',
+    'Age in 5-year groups': 'Age_Group',
+    'Age of respondent at 1st birth': 'Age_First_Birth',
     'Smokes cigarettes': 'Smoking',
-    'Age at first birth': 'Age_First_Birth',
+    'Taking iron pills, sprinkles or syrup': 'Iron_Intake',
+    'Anemia level': 'Anemia_Level',
+    'City': 'City',
     'latitude': 'Latitude',
-    'longitude': 'Longitude',
-    'Region': 'Region'
+    'longitude': 'Longitude'
 })
+
+# Drop missing rows in key columns
 df = df[df["Anemia_Level"].notna() & df["Latitude"].notna() & df["Longitude"].notna()]
 
-# Page layout configuration
-st.set_page_config(page_title="Child Anemia Dashboard", layout="wide")
+# Page configuration and custom style
+st.set_page_config(layout="wide")
+st.markdown("""
+<style>
+    .block-container {
+        padding-top: 0.5rem;
+        padding-bottom: 0rem;
+    }
+    section[data-testid="stSidebar"] {
+        background-color: #f5f5f5;
+        padding-top: 1rem;
+    }
+</style>
+""", unsafe_allow_html=True)
 
-# Color map
-color_map = {
-    'Not anemic': '#1f77b4',
-    'Mild': '#d62728',
-    'Moderate': '#9467bd',
-    'Severe': '#17becf'
-}
+st.title("🩸 Child Anemia Dashboard")
 
 # Sidebar filters
 with st.sidebar:
@@ -40,7 +48,7 @@ with st.sidebar:
     selected_wealth = st.radio("Select Wealth Index", sorted(df["Wealth"].dropna().unique()))
     selected_marital = st.radio("Select Marital Status", df["Marital_Status"].dropna().unique())
 
-# Apply filters
+# Filtered data
 filtered_df = df[
     (df["Residence"] == selected_residence) &
     (df["Age_Group"] == selected_age) &
@@ -48,42 +56,50 @@ filtered_df = df[
     (df["Marital_Status"] == selected_marital)
 ]
 
-# Dashboard title
-st.title("🩸 Child Anemia Dashboard")
+# Custom color map
+color_map = {
+    'Not anemic': '#1f77b4',
+    'Mild': '#d62728',
+    'Moderate': '#9467bd',
+    'Severe': '#17becf'
+}
 
-# First row: Map + Box plot
-col1, col2 = st.columns([1, 1])
+# Row 1: Map + Box Plot
+col1, col2 = st.columns([1.1, 0.9])
 with col1:
-    map_fig = px.scatter_mapbox(
+    fig_map = px.scatter_mapbox(
         filtered_df,
         lat="Latitude",
         lon="Longitude",
         color="Anemia_Level",
         mapbox_style="carto-positron",
-        zoom=5,
         color_discrete_map=color_map,
+        zoom=5,
+        height=320,
         title="Geographic Distribution of Anemia"
     )
-    st.plotly_chart(map_fig, use_container_width=True)
+    st.plotly_chart(fig_map, use_container_width=True)
 
 with col2:
-    fig2 = px.box(filtered_df, x="Wealth", y="Age_First_Birth", color="Anemia_Level",
-                  title="Mother's Age at First Birth by Wealth Index",
-                  color_discrete_map=color_map)
-    st.plotly_chart(fig2, use_container_width=True)
+    if not filtered_df.empty:
+        fig_box = px.box(filtered_df, x="Wealth", y="Age_First_Birth", color="Anemia_Level",
+                         color_discrete_map=color_map,
+                         title="Mother's Age at First Birth by Wealth Index")
+        st.plotly_chart(fig_box, use_container_width=True)
 
-# Second row: Pie + Education-level grouped bar
-col3, col4 = st.columns([1, 1])
+# Row 2: Iron Pie + Education Bar
+col3, col4 = st.columns([0.9, 1.1])
 with col3:
-    sub_df = filtered_df[filtered_df['Iron_Intake'] == 'No']
-    if not sub_df.empty:
-        pie_fig = px.pie(sub_df, names='Anemia_Level', hole=0.4, color='Anemia_Level',
-                         color_discrete_map=color_map, title='Anemia in Children Without Iron Supplements')
-        st.plotly_chart(pie_fig, use_container_width=True)
+    no_iron = filtered_df[filtered_df["Iron_Intake"] == "No"]
+    if not no_iron.empty:
+        fig_pie = px.pie(no_iron, names="Anemia_Level", color="Anemia_Level",
+                         color_discrete_map=color_map, hole=0.4,
+                         title="Anemia in Children Without Iron Supplements")
+        st.plotly_chart(fig_pie, use_container_width=True)
 
 with col4:
     edu_group = filtered_df.groupby("Education_Level")["Anemia_Level"].value_counts(normalize=True).rename("Proportion").reset_index()
-    fig4 = px.bar(edu_group, x="Education_Level", y="Proportion", color="Anemia_Level",
-                  barmode="group", title="Proportion of Anemia by Mother's Education",
-                  color_discrete_map=color_map)
-    st.plotly_chart(fig4, use_container_width=True)
+    fig_edu = px.bar(edu_group, x="Education_Level", y="Proportion", color="Anemia_Level",
+                     barmode="group", color_discrete_map=color_map,
+                     title="Proportion of Anemia by Mother's Education")
+    st.plotly_chart(fig_edu, use_container_width=True)
