@@ -85,7 +85,7 @@ with col3:
     sub_df = filtered_df[filtered_df['Iron_Intake'] == 'No']
     if not sub_df.empty:
         pie_fig = px.pie(sub_df, names='Anemia_Level', hole=0.4, color='Anemia_Level',
-                         color_discrete_map=color_map, title='Anemia Distribution Among Children Without Iron Supplements',
+                         color_discrete_map=color_map, title='Iron Deficiency and Anemia',
                          width=340, height=280)
         st.plotly_chart(pie_fig, use_container_width=False, config={'displayModeBar': False})
 
