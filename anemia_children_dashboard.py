@@ -93,18 +93,18 @@ col3, col4 = st.columns(2)
 col3, col4 = st.columns(2)
 
 with col3:
-    st.caption("🍼 Anemia in Children Without Iron Supplements")
+    st.markdown("**🍼 Anemia in Children Without Iron Supplements**")
     fig_iron = px.histogram(
         filtered_df[filtered_df["Taking iron pills, sprinkles or syrup"] == "No"],
         x="Anemia_Level",
         color="Anemia_Level",
         color_discrete_map=color_map,
-        height=290  # ⬅️ increased height
+        height=290
     )
     st.plotly_chart(fig_iron, use_container_width=True)
 
 with col4:
-    st.caption("🎓 Proportion of Anemia by Mother's Education")
+    st.markdown("**🎓 Proportion of Anemia by Mother's Education**")
     df_edu = filtered_df.groupby(["Highest educational level", "Anemia_Level"]).size().reset_index(name="count")
     df_total = df_edu.groupby("Highest educational level")["count"].transform("sum")
     df_edu["Proportion"] = df_edu["count"] / df_total
@@ -115,6 +115,6 @@ with col4:
         color="Anemia_Level",
         color_discrete_map=color_map,
         barmode="stack",
-        height=290  # ⬅️ increased height
+        height=290
     )
     st.plotly_chart(fig_edu, use_container_width=True)
