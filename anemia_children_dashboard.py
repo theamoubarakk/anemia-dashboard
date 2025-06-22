@@ -8,9 +8,10 @@ st.set_page_config(page_title="Child Anemia Dashboard", layout="wide")
 # --- Custom Styling ---
 st.markdown("""
     <style>
-        .block-container { padding-top: 1rem; }
+        .block-container { padding-top: 0.5rem; padding-bottom: 0.5rem; }
         .stSidebar { background-color: #FAFAFA; }
         .stRadio > div { flex-direction: column; }
+        .stPlotlyChart { height: 300px !important; }
     </style>
 """, unsafe_allow_html=True)
 
@@ -53,7 +54,7 @@ color_map = {
 # =======================
 
 # --- Top Row ---
-col1, col2 = st.columns(2)
+col1, col2 = st.columns([1, 1])
 
 # Map Chart
 with col1:
@@ -66,7 +67,7 @@ with col1:
         color_discrete_map=color_map,
         hover_data=["City", "Anemia_Level"],
         zoom=5,
-        height=400
+        height=300
     )
     fig_map.update_layout(mapbox_style="open-street-map", margin={"r":0,"t":0,"l":0,"b":0})
     st.plotly_chart(fig_map, use_container_width=True)
@@ -80,12 +81,13 @@ with col2:
         y="Age of respondent at 1st birth",
         color="Anemia_Level",
         color_discrete_map=color_map,
-        points="all"
+        points="all",
+        height=300
     )
     st.plotly_chart(fig_box, use_container_width=True)
 
 # --- Second Row ---
-col3, col4 = st.columns(2)
+col3, col4 = st.columns([1, 1])
 
 # Anemia in Children Without Iron Supplements
 with col3:
@@ -95,7 +97,8 @@ with col3:
         filtered_df[filtered_df["Taking iron pills, sprinkles or syrup"] == "No"],
         x="Anemia_Level",
         color="Anemia_Level",
-        color_discrete_map=color_map
+        color_discrete_map=color_map,
+        height=300
     )
     st.plotly_chart(fig_iron, use_container_width=True)
 
@@ -112,6 +115,7 @@ with col4:
         y="Proportion",
         color="Anemia_Level",
         color_discrete_map=color_map,
-        barmode="stack"
+        barmode="stack",
+        height=300
     )
     st.plotly_chart(fig_edu, use_container_width=True)
