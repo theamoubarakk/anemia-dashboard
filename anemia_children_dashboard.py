@@ -40,7 +40,7 @@ section[data-testid="stSidebar"] div[class^="css"] {
 </style>
 """, unsafe_allow_html=True)
 
-st.title("🩸 Child Anemia Dashboard: Cleaned Dataset Edition")
+st.title("🩸 Child Anemia Dashboard ")
 
 # Sidebar Filters (Fixed)
 with st.sidebar:
