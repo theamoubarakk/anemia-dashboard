@@ -19,7 +19,7 @@ df = df[df['Anemia_Level'].notna() & df['latitude'].notna() & df['longitude'].no
 
 # Page config
 st.set_page_config(page_title="Anemia Dashboard", layout="wide")
-st.title("🩸\u200d⚕️ Child Anemia Dashboard")
+st.title("🩸\u200d Child Anemia Dashboard ⚕️")
 
 # Sidebar Filters
 with st.sidebar:
