@@ -96,12 +96,13 @@ col3, col4 = st.columns(2)
 with col3:
     st.markdown("**💊 Child Anemia by Mother's Iron Supplement Intake**")
     
-    iron_group = (
-        df.groupby("Taking iron pills, sprinkles or syrup")["Anemia_Level"]
-        .value_counts(normalize=True)
-        .rename("Proportion")
-        .reset_index()
-    )
+  iron_group = (
+    df[df["Taking iron pills, sprinkles or syrup"].isin(["Yes", "No"])]
+    .groupby("Taking iron pills, sprinkles or syrup")["Anemia_Level"]
+    .value_counts(normalize=True)
+    .rename("Proportion")
+    .reset_index()
+)
 
     fig_iron = px.bar(
         iron_group,
