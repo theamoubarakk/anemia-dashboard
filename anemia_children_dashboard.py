@@ -34,7 +34,7 @@ df = load_data()
 st.sidebar.header("Filters")
 residence = st.sidebar.radio("Select Residence", df["Type of place of residence"].unique())
 age_group = st.sidebar.radio("Select Age Group", sorted(df["Age in 5-year groups"].unique()))
-wealth = st.sidebar.selectbox("Select Wealth Index", sorted(df["Wealth index combined"].unique()))
+wealth = st.sidebar.radio("Select Wealth Index", sorted(df["Wealth index combined"].unique()))
 iron_supp = st.sidebar.radio("Taking Iron Supplements", df["Taking iron pills, sprinkles or syrup"].unique())
 
 # --- Apply Filters ---
@@ -58,7 +58,7 @@ color_map = {
 col1, col2 = st.columns(2)
 
 with col1:
-    st.caption("📍 Geographic Distribution of Anemia")
+    st.markdown("**📍 Geographic Distribution of Anemia**")
     fig_map = px.scatter_mapbox(
         filtered_df,
         lat="Latitude",
@@ -67,13 +67,13 @@ with col1:
         color_discrete_map=color_map,
         hover_data=["City", "Anemia_Level"],
         zoom=5,
-        height=230
+        height=280
     )
     fig_map.update_layout(mapbox_style="open-street-map", margin={"r":0,"t":0,"l":0,"b":0})
     st.plotly_chart(fig_map, use_container_width=True)
 
 with col2:
-    st.caption("👩‍👧 Mother's Age at First Birth by Wealth Index")
+    st.markdown("**👩‍🍼 Mother's Age at First Birth by Wealth Index**")
     fig_box = px.box(
         filtered_df,
         x="Wealth index combined",
@@ -81,9 +81,10 @@ with col2:
         color="Anemia_Level",
         color_discrete_map=color_map,
         points="all",
-        height=230
+        height=280
     )
     st.plotly_chart(fig_box, use_container_width=True)
+
 
 # --- Second Row ---
 col3, col4 = st.columns(2)
