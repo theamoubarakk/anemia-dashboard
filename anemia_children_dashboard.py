@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
-# Load and clean data
+# Load and clean main dataset
 df = pd.read_csv("children anemia.csv")
 df = df.rename(columns={
     'Age in 5-year groups': 'Age_Group',
@@ -17,7 +17,10 @@ df = df.rename(columns={
 })
 df = df[df['Anemia_Level'].notna()]
 
-# Page configuration and CSS
+# Load global anemia data for map
+geo_df = pd.read_csv("anemia_median_income_gdp.csv")
+
+# Page layout config
 st.set_page_config(page_title="Anemia Dashboard", layout="wide")
 st.markdown("""
 <style>
@@ -41,7 +44,7 @@ section[data-testid="stSidebar"] div[class^="css"] {
 
 st.title("🩸 Child Anemia Dashboard: Exploring Maternal Links")
 
-# Sidebar Filters (Fixed)
+# Sidebar Filters
 with st.sidebar:
     st.header("Filters")
     selected_residence = st.radio("Select Residence", df["Residence"].dropna().unique())
@@ -49,7 +52,7 @@ with st.sidebar:
     selected_wealth = st.radio("Select Wealth Level", df["Wealth"].dropna().unique())
     selected_marital = st.radio("Marital Status", df["Marital_Status"].dropna().unique())
 
-# Filter data
+# Apply filters
 filtered_df = df[
     (df["Residence"] == selected_residence) &
     (df["Age_Group"] == selected_age) &
@@ -57,15 +60,15 @@ filtered_df = df[
     (df["Marital_Status"] == selected_marital)
 ]
 
-# Updated custom color palette
+# Color palette
 color_map = {
-    'Not anemic': '#1f77b4',   # Blue
-    'Mild': '#d62728',         # Red
-    'Moderate': '#9467bd',     # Purple
-    'Severe': '#17becf'        # Light Blue
+    'Not anemic': '#1f77b4',
+    'Mild': '#d62728',
+    'Moderate': '#9467bd',
+    'Severe': '#17becf'
 }
 
-# Row 1: Mother's Education Bar + Hemoglobin Box
+# Row 1 - Education + Hemoglobin Box
 col1, col2 = st.columns([1, 1], gap="small")
 with col1:
     fig1 = px.bar(filtered_df, x="Education", color="Anemia_Level", barmode="group",
@@ -79,14 +82,15 @@ with col2:
                   title="Hemoglobin Levels Across Economic Status", width=360, height=300)
     st.plotly_chart(fig2, use_container_width=True)
 
-# Row 2: Iron Intake Pie Chart + Smoking Histogram
+# Row 2 - Iron Pie + Smoking Histogram
 col3, col4 = st.columns([1, 1], gap="small")
 with col3:
     sub_df = filtered_df[filtered_df['Iron_Intake'] == 'No']
     if not sub_df.empty:
         pie_fig = px.pie(sub_df, names='Anemia_Level', hole=0.4, color='Anemia_Level',
-                         color_discrete_map=color_map, title='Iron Deficiency and Anemia',
-                         width=340, height=280)
+                         color_discrete_map=color_map,
+                         title='Iron Deficiency and Anemia',
+                         width=320, height=260)
         st.plotly_chart(pie_fig, use_container_width=False, config={'displayModeBar': False})
 
 with col4:
@@ -94,3 +98,19 @@ with col4:
                         color_discrete_map=color_map,
                         title='How Maternal Smoking Relates to Child Hemoglobin Levels', width=360, height=300)
     st.plotly_chart(fig4, use_container_width=True)
+
+# Row 3 - Global Anemia Map
+col5 = st.columns(1)[0]
+with col5:
+    map_fig = px.choropleth(
+        geo_df,
+        locations="Location",
+        locationmode="country names",
+        color="Anemia",
+        hover_name="Location",
+        animation_frame="Year",
+        color_continuous_scale="Reds",
+        title="🌍 Global Anemia Prevalence (2019)",
+    )
+    map_fig.update_layout(width=700, height=340, margin={"r":0,"t":40,"l":0,"b":0})
+    st.plotly_chart(map_fig, use_container_width=True)
