@@ -8,10 +8,10 @@ st.set_page_config(page_title="Child Anemia Dashboard", layout="wide")
 # --- Custom Styling ---
 st.markdown("""
     <style>
-        .block-container { padding-top: 0.3rem; padding-bottom: 0.3rem; }
+        .block-container { padding-top: 0.1rem; padding-bottom: 0.1rem; }
         .stSidebar { background-color: #FAFAFA; }
         .stRadio > div { flex-direction: column; }
-        .css-1kyxreq { padding-top: 0rem; padding-bottom: 0rem; }
+        h2, h3, h4, h5, h6 { margin-bottom: 0.3rem; margin-top: 0.3rem; }
     </style>
 """, unsafe_allow_html=True)
 
@@ -20,7 +20,6 @@ st.title("🩸‍ Child Anemia Dashboard ⚕️")
 
 # --- Load Data ---
 @st.cache_data
-
 def load_data():
     df = pd.read_csv("Children_Anemia_with_Location.csv")
     df["Anemia level"] = df["Anemia level"].str.strip()
@@ -45,16 +44,14 @@ filtered_df = df[
     (df["Taking iron pills, sprinkles or syrup"] == iron_supp)
 ]
 
-# --- Color Map for Anemia Level ---
+# --- Color Map ---
 color_map = {
     "Not anemic": "#1A237E",
     "Mild": "#FFC107",
     "Moderate": "#F44336"
 }
 
-# =======================
-#        Charts (2x2)
-# =======================
+# ============ CHARTS ==============
 
 # --- First Row ---
 col1, col2 = st.columns(2)
@@ -69,7 +66,7 @@ with col1:
         color_discrete_map=color_map,
         hover_data=["City", "Anemia_Level"],
         zoom=5,
-        height=280
+        height=260
     )
     fig_map.update_layout(mapbox_style="open-street-map", margin={"r":0,"t":0,"l":0,"b":0})
     st.plotly_chart(fig_map, use_container_width=True)
@@ -83,7 +80,7 @@ with col2:
         color="Anemia_Level",
         color_discrete_map=color_map,
         points="all",
-        height=280
+        height=260
     )
     st.plotly_chart(fig_box, use_container_width=True)
 
@@ -98,7 +95,7 @@ with col3:
         x="Anemia_Level",
         color="Anemia_Level",
         color_discrete_map=color_map,
-        height=280
+        height=260
     )
     st.plotly_chart(fig_iron, use_container_width=True)
 
@@ -114,6 +111,6 @@ with col4:
         color="Anemia_Level",
         color_discrete_map=color_map,
         barmode="stack",
-        height=280
+        height=260
     )
     st.plotly_chart(fig_edu, use_container_width=True)
