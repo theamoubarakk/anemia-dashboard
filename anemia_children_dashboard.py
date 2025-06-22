@@ -94,9 +94,8 @@ with col3:
         )
         st.plotly_chart(pie_fig, use_container_width=True)
 with col4:
-    edu_group = filtered_df.groupby("Education")["Anemia_Level"].value_counts(normalize=True).rename("Proportion").reset_index()
+    edu_group = filtered_df.groupby("Highest educational level")["Anemia_Level"].value_counts(normalize=True).rename("Proportion").reset_index()
 
-fig = px.bar(edu_group, x="Education", y="Proportion", color="Anemia_Level", barmode="group",
              title="Proportion of Anemia by Mother's Education", color_discrete_map=color_map)
 st.plotly_chart(fig, use_container_width=True)
 
