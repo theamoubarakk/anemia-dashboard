@@ -11,7 +11,8 @@ st.markdown("""
         .block-container { padding-top: 0.1rem; padding-bottom: 0.1rem; }
         .stSidebar { background-color: #FAFAFA; }
         .stRadio > div { flex-direction: column; }
-        h2, h3, h4, h5, h6 { margin-bottom: 0.3rem; margin-top: 0.3rem; }
+        h2, h3, h4, h5, h6 { margin-top: 0rem; margin-bottom: 0.2rem; font-size: 1rem !important; }
+        .stCaption { font-size: 0.9rem !important; }
     </style>
 """, unsafe_allow_html=True)
 
@@ -57,7 +58,7 @@ color_map = {
 col1, col2 = st.columns(2)
 
 with col1:
-    st.subheader("Geographic Distribution of Anemia")
+    st.caption("📍 Geographic Distribution of Anemia")
     fig_map = px.scatter_mapbox(
         filtered_df,
         lat="Latitude",
@@ -66,13 +67,13 @@ with col1:
         color_discrete_map=color_map,
         hover_data=["City", "Anemia_Level"],
         zoom=5,
-        height=260
+        height=230
     )
     fig_map.update_layout(mapbox_style="open-street-map", margin={"r":0,"t":0,"l":0,"b":0})
     st.plotly_chart(fig_map, use_container_width=True)
 
 with col2:
-    st.subheader("Mother's Age at First Birth by Wealth Index")
+    st.caption("👩‍👧 Mother's Age at First Birth by Wealth Index")
     fig_box = px.box(
         filtered_df,
         x="Wealth index combined",
@@ -80,7 +81,7 @@ with col2:
         color="Anemia_Level",
         color_discrete_map=color_map,
         points="all",
-        height=260
+        height=230
     )
     st.plotly_chart(fig_box, use_container_width=True)
 
@@ -88,19 +89,18 @@ with col2:
 col3, col4 = st.columns(2)
 
 with col3:
-    st.subheader("Anemia in Children Without Iron Supplements")
-    st.caption("Only among non-supplemented cases")
+    st.caption("🍼 Anemia in Children Without Iron Supplements")
     fig_iron = px.histogram(
         filtered_df[filtered_df["Taking iron pills, sprinkles or syrup"] == "No"],
         x="Anemia_Level",
         color="Anemia_Level",
         color_discrete_map=color_map,
-        height=260
+        height=230
     )
     st.plotly_chart(fig_iron, use_container_width=True)
 
 with col4:
-    st.subheader("Proportion of Anemia by Mother's Education")
+    st.caption("🎓 Proportion of Anemia by Mother's Education")
     df_edu = filtered_df.groupby(["Highest educational level", "Anemia_Level"]).size().reset_index(name="count")
     df_total = df_edu.groupby("Highest educational level")["count"].transform("sum")
     df_edu["Proportion"] = df_edu["count"] / df_total
@@ -111,6 +111,6 @@ with col4:
         color="Anemia_Level",
         color_discrete_map=color_map,
         barmode="stack",
-        height=260
+        height=230
     )
     st.plotly_chart(fig_edu, use_container_width=True)
