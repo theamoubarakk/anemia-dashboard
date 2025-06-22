@@ -96,13 +96,13 @@ col3, col4 = st.columns(2)
 with col3:
     st.markdown("**💊 Child Anemia by Mother's Iron Supplement Intake**")
     
-  iron_group = (
-    df[df["Taking iron pills, sprinkles or syrup"].isin(["Yes", "No"])]
-    .groupby("Taking iron pills, sprinkles or syrup")["Anemia_Level"]
-    .value_counts(normalize=True)
-    .rename("Proportion")
-    .reset_index()
-)
+    iron_group = (
+        df[df["Taking iron pills, sprinkles or syrup"].isin(["Yes", "No"])]
+        .groupby("Taking iron pills, sprinkles or syrup")["Anemia_Level"]
+        .value_counts(normalize=True)
+        .rename("Proportion")
+        .reset_index()
+    )
 
     fig_iron = px.bar(
         iron_group,
@@ -112,12 +112,6 @@ with col3:
         color_discrete_map=color_map,
         barmode="stack",
         height=290
-    )
-    
-    fig_iron.update_layout(
-        xaxis_title="Mother Took Iron During Pregnancy?",
-        yaxis_title="Proportion of Children",
-        legend_title="Anemia Level"
     )
 
     st.plotly_chart(fig_iron, use_container_width=True)
