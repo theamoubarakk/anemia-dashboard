@@ -70,13 +70,13 @@ col1, col2 = st.columns([1, 1], gap="small")
 with col1:
     fig1 = px.bar(filtered_df, x="Education", color="Anemia_Level", barmode="group",
                   color_discrete_map=color_map,
-                  title="Anemia by Mother's Education", width=360, height=300)
+                  title="Impact of Maternal Education on Child Anemia Severity", width=360, height=300)
     st.plotly_chart(fig1, use_container_width=True)
 
 with col2:
     fig2 = px.box(filtered_df, x="Wealth", y="Hemoglobin", color="Anemia_Level",
                   color_discrete_map=color_map,
-                  title="Hemoglobin by Wealth", width=360, height=300)
+                  title="Hemoglobin Levels Across Economic Status", width=360, height=300)
     st.plotly_chart(fig2, use_container_width=True)
 
 # Row 2: Iron Intake Pie Chart + Smoking Histogram
@@ -85,12 +85,12 @@ with col3:
     sub_df = filtered_df[filtered_df['Iron_Intake'] == 'No']
     if not sub_df.empty:
         pie_fig = px.pie(sub_df, names='Anemia_Level', hole=0.4, color='Anemia_Level',
-                         color_discrete_map=color_map, title='Anemia Levels - Iron Intake: No',
+                         color_discrete_map=color_map, title='Anemia Distribution Among Children Without Iron Supplements',
                          width=340, height=280)
         st.plotly_chart(pie_fig, use_container_width=False, config={'displayModeBar': False})
 
 with col4:
     fig4 = px.histogram(filtered_df, x='Hemoglobin', facet_col='Smoking', color='Anemia_Level',
                         color_discrete_map=color_map,
-                        title='Hemoglobin Distribution by Smoking Status', width=360, height=300)
+                        title='How Maternal Smoking Relates to Child Hemoglobin Levels', width=360, height=300)
     st.plotly_chart(fig4, use_container_width=True)
