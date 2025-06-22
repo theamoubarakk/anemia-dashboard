@@ -8,9 +8,10 @@ st.set_page_config(page_title="Child Anemia Dashboard", layout="wide")
 # --- Custom Styling ---
 st.markdown("""
     <style>
-        .block-container { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+        .block-container { padding-top: 0.3rem; padding-bottom: 0.3rem; }
         .stSidebar { background-color: #FAFAFA; }
         .stRadio > div { flex-direction: column; }
+        .css-1kyxreq { padding-top: 0rem; padding-bottom: 0rem; }
     </style>
 """, unsafe_allow_html=True)
 
@@ -68,7 +69,7 @@ with col1:
         color_discrete_map=color_map,
         hover_data=["City", "Anemia_Level"],
         zoom=5,
-        height=300
+        height=280
     )
     fig_map.update_layout(mapbox_style="open-street-map", margin={"r":0,"t":0,"l":0,"b":0})
     st.plotly_chart(fig_map, use_container_width=True)
@@ -82,7 +83,7 @@ with col2:
         color="Anemia_Level",
         color_discrete_map=color_map,
         points="all",
-        height=300
+        height=280
     )
     st.plotly_chart(fig_box, use_container_width=True)
 
@@ -97,7 +98,7 @@ with col3:
         x="Anemia_Level",
         color="Anemia_Level",
         color_discrete_map=color_map,
-        height=300
+        height=280
     )
     st.plotly_chart(fig_iron, use_container_width=True)
 
@@ -113,6 +114,6 @@ with col4:
         color="Anemia_Level",
         color_discrete_map=color_map,
         barmode="stack",
-        height=300
+        height=280
     )
     st.plotly_chart(fig_edu, use_container_width=True)
