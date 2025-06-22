@@ -50,7 +50,7 @@ col1, col2 = st.columns([1, 1], gap="small")
 with col1:
     fig_map = px.scatter_mapbox(filtered_df, lat="latitude", lon="longitude", color="Anemia_Level",
                                 color_discrete_map=color_map, zoom=5, height=300,
-                                title="Geographic Distribution of Anemia")
+                                title="Geographic Distribution of Anemia in Nigeria")
     fig_map.update_layout(mapbox_style="open-street-map", margin={"r":0,"t":30,"l":0,"b":0})
     st.plotly_chart(fig_map, use_container_width=True)
 
