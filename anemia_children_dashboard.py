@@ -45,11 +45,10 @@ filtered_df = df[
     (df["Taking iron pills, sprinkles or syrup"] == iron_supp)
 ]
 
-# --- Color Map ---
 color_map = {
-    "Not anemic": "#3B5998",
-    "Mild": "#581845",           # Dark Bordeaux
-    "Moderate": "#8B0000"        # Dark Red
+    "Not anemic": "#4682B4",   # Steel Blue
+    "Mild": "#9B4F96",         # Muted Plum
+    "Moderate": "#B22222"      # Firebrick Red
 }
 
 # ============ CHARTS ==============
