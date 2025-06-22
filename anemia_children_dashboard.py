@@ -16,8 +16,12 @@ st.markdown("""
 
 # --- Load Data ---
 @st.cache_data
+
 def load_data():
-    df = pd.read_csv("Children_Anemia_with_Location.csv")  # UPDATE with your dataset name
+    df = pd.read_csv("Children_Anemia_with_Location.csv")
+    df["Anemia level"] = df["Anemia level"].str.strip()
+    df["Anemia level.1"] = df["Anemia level.1"].str.strip()
+    df["Anemia_Level"] = df["Anemia level"].combine_first(df["Anemia level.1"])
     return df
 
 df = load_data()
@@ -25,23 +29,23 @@ df = load_data()
 # --- Sidebar Filters ---
 st.sidebar.header("Filters")
 residence = st.sidebar.radio("Select Residence", df["Type of place of residence"].unique())
-age_group = st.sidebar.radio("Select Age Group", sorted(df["Age_Group"].unique()))
-wealth = st.sidebar.selectbox("Select Wealth Index", df["Wealth_Index"].unique())
-iron_supp = st.sidebar.radio("Taking Iron Supplements", df["Iron_Supplements"].unique())
+age_group = st.sidebar.radio("Select Age Group", sorted(df["Age in 5-year groups"].unique()))
+wealth = st.sidebar.selectbox("Select Wealth Index", sorted(df["Wealth index combined"].unique()))
+iron_supp = st.sidebar.radio("Taking Iron Supplements", df["Taking iron pills, sprinkles or syrup"].unique())
 
 # --- Apply Filters ---
 filtered_df = df[
-    (df["Residence"] == residence) &
-    (df["Age_Group"] == age_group) &
-    (df["Wealth_Index"] == wealth) &
-    (df["Iron_Supplements"] == iron_supp)
+    (df["Type of place of residence"] == residence) &
+    (df["Age in 5-year groups"] == age_group) &
+    (df["Wealth index combined"] == wealth) &
+    (df["Taking iron pills, sprinkles or syrup"] == iron_supp)
 ]
 
 # --- Color Map for Anemia Level ---
 color_map = {
-    "Not anemic": "#4A90E2",
-    "Mild": "#F88379",
-    "Moderate": "#D0021B"
+    "Not anemic": "#1A237E",
+    "Mild": "#FFC107",
+    "Moderate": "#F44336"
 }
 
 # =======================
@@ -51,28 +55,32 @@ color_map = {
 # --- Top Row ---
 col1, col2 = st.columns(2)
 
-# Map Chart (Replace with your real map chart)
+# Map Chart
 with col1:
-    st.plotly_chart(
-        px.scatter_mapbox(
-            filtered_df,
-            lat="lat", lon="lon", zoom=5,
-            color="Anemia_Level",
-            color_discrete_map=color_map,
-            mapbox_style="carto-positron"
-        ),
-        use_container_width=True
-    )
-
-# Box Plot (Age vs Wealth Index)
-with col2:
-    fig_box = px.box(
+    st.subheader("Geographic Distribution of Anemia")
+    fig_map = px.scatter_mapbox(
         filtered_df,
-        x="Wealth_Index",
-        y="Age_at_Birth",
+        lat="Latitude",
+        lon="Longitude",
         color="Anemia_Level",
         color_discrete_map=color_map,
-        title="Age of Respondent at Birth by Wealth Index"
+        hover_data=["City", "Anemia_Level"],
+        zoom=5,
+        height=400
+    )
+    fig_map.update_layout(mapbox_style="open-street-map", margin={"r":0,"t":0,"l":0,"b":0})
+    st.plotly_chart(fig_map, use_container_width=True)
+
+# Box Plot (Age at Birth vs Wealth Index)
+with col2:
+    st.subheader("Mother's Age at First Birth by Wealth Index")
+    fig_box = px.box(
+        filtered_df,
+        x="Wealth index combined",
+        y="Age of respondent at 1st birth",
+        color="Anemia_Level",
+        color_discrete_map=color_map,
+        points="all"
     )
     st.plotly_chart(fig_box, use_container_width=True)
 
@@ -84,7 +92,7 @@ with col3:
     st.subheader("Anemia in Children Without Iron Supplements")
     st.caption("Only among non-supplemented cases")
     fig_iron = px.histogram(
-        filtered_df[filtered_df["Iron_Supplements"] == "No"],
+        filtered_df[filtered_df["Taking iron pills, sprinkles or syrup"] == "No"],
         x="Anemia_Level",
         color="Anemia_Level",
         color_discrete_map=color_map
@@ -94,13 +102,13 @@ with col3:
 # Proportion of Anemia by Mother's Education
 with col4:
     st.subheader("Proportion of Anemia by Mother's Education")
-    df_edu = filtered_df.groupby(["Mother_Education", "Anemia_Level"]).size().reset_index(name="count")
-    df_total = df_edu.groupby("Mother_Education")["count"].transform("sum")
+    df_edu = filtered_df.groupby(["Highest educational level", "Anemia_Level"]).size().reset_index(name="count")
+    df_total = df_edu.groupby("Highest educational level")["count"].transform("sum")
     df_edu["Proportion"] = df_edu["count"] / df_total
 
     fig_edu = px.bar(
         df_edu,
-        x="Mother_Education",
+        x="Highest educational level",
         y="Proportion",
         color="Anemia_Level",
         color_discrete_map=color_map,
