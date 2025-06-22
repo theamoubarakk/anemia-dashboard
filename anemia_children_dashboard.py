@@ -68,9 +68,10 @@ color_map = {
 # Row 1: Mother's Education Bar + Hemoglobin Box
 col1, col2 = st.columns([1, 1], gap="small")
 with col1:
-    fig1 = px.bar(filtered_df, x="Education", color="Anemia_Level", barmode="group",
-                  color_discrete_map=color_map,
-                  title="Impact of Maternal Education on Child Anemia Severity", width=360, height=300)
+    edu_group = filtered_df.groupby("Education")["Anemia_Level"].value_counts(normalize=True).rename("Proportion").reset_index()
+    fig1 = px.bar(edu_group, x="Education", y="Proportion", color="Anemia_Level", 
+                  barmode="group", color_discrete_map=color_map,
+                  title="Proportion of Anemia Levels by Mother's Education", width=360, height=300)
     st.plotly_chart(fig1, use_container_width=True)
 
 with col2:
