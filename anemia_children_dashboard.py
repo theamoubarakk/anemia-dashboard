@@ -17,7 +17,7 @@ st.markdown("""
 # --- Load Data ---
 @st.cache_data
 def load_data():
-    df = pd.read_csv("your_cleaned_anemia_dataset.csv")  # UPDATE with your dataset name
+    df = pd.read_csv("Children_Anemia_with_Location.csv")  # UPDATE with your dataset name
     return df
 
 df = load_data()
