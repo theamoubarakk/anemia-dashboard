@@ -22,7 +22,7 @@ st.title("🩸‍ Child Anemia Dashboard ⚕️")
 # --- Load Data ---
 @st.cache_data
 def load_data():
-    df = pd.read_csv("Children_Anemia_with_Location.csv")
+    df = pd.read_csv("Final_Children_Anemia_Adjusted.csv")
     df["Anemia level"] = df["Anemia level"].str.strip()
     df["Anemia level.1"] = df["Anemia level.1"].str.strip()
     df["Anemia_Level"] = df["Anemia level"].combine_first(df["Anemia level.1"])
